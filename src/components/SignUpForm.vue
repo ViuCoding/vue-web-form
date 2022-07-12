@@ -13,7 +13,11 @@
     <label>Skills:</label>
     <input type="text" v-model="tempSkill" @keyup="addSkill" />
 
-    <div v-for="skill in skills" :key="skill" class="pill">{{ skill }}</div>
+    <div v-for="skill in skills" :key="skill" class="pill">
+      <p @click="deleteSkill(skill)">
+        {{ skill }}
+      </p>
+    </div>
 
     <div class="terms">
       <input type="checkbox" required v-model="terms" />
@@ -52,6 +56,15 @@ export default {
         }
         this.tempSkill = "";
       }
+    },
+
+    deleteSkill(skill) {
+    //   console.log(skill);
+        this.skills = this.skills.filter((item) => { // We update the skills array and filter out the clicked item
+          return skill !== item; 
+          // If they are not equal it returns true and that items stays in the array
+          // If they are equal the expression "skill !== item" will return false hence the item will be removed from the array
+        });
     },
   },
 };
@@ -92,5 +105,18 @@ input[type="checkbox"] {
   margin: 0 10px 0 0;
   position: relative;
   top: 2px;
+}
+
+.pill {
+  display: inline-block;
+  margin: 20px 10px 0 0;
+  padding: 6px 12px;
+  background: #eee;
+  border-radius: 20px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  font-weight: bold;
+  color: #777;
+  cursor: pointer;
 }
 </style>
