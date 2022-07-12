@@ -10,22 +10,14 @@
       <option value="designer">Web Designer</option>
     </select>
 
+    <label>Skills:</label>
+    <input type="text" v-model="tempSkill" @keyup="addSkill" />
+
+    <div v-for="skill in skills" :key="skill" class="pill">{{ skill }}</div>
+
     <div class="terms">
       <input type="checkbox" required v-model="terms" />
       <label>Accept terms and conditions.</label>
-    </div>
-
-    <div>
-      <input type="checkbox" value="Mario" v-model="names" />
-      <label>Mario</label>
-    </div>
-    <div>
-      <input type="checkbox" value="Yoshi" v-model="names" />
-      <label>Yoshi</label>
-    </div>
-    <div>
-      <input type="checkbox" value="Rossifumi" v-model="names" />
-      <label>Rossifumi</label>
     </div>
   </form>
 
@@ -33,7 +25,6 @@
   <p>Password: {{ password }}</p>
   <p>Role: {{ role }}</p>
   <p>Terms: {{ terms }}</p>
-  <p>Names: {{ names }}</p>
 </template>
 
 <script>
@@ -44,8 +35,24 @@ export default {
       password: "",
       role: "",
       terms: false,
-      names: [],
+      tempSkill: "",
+      skills: [],
     };
+  },
+
+  methods: {
+    addSkill(event) {
+      //   console.log(event);
+      // The event is a built-in object that we can use and manipulate, in this case to capute keyboards clicks
+      if (event.key === "Enter" && this.tempSkill) {
+        // Everytime that we type "," && tempSkill is not an empty string, we push the value to the skills array
+        if (!this.skills.includes(this.tempSkill)) {
+          // This check prevents us from having duplicate values in the skills array
+          this.skills.push(this.tempSkill);
+        }
+        this.tempSkill = "";
+      }
+    },
   },
 };
 </script>
