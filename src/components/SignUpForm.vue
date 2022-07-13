@@ -1,9 +1,12 @@
 <template>
-  <form>
+  <!-- The .prevent prevents the page from quickly refreshing once we hit the submit button -->
+  <form @submit.prevent="handleSubmit">
     <label>Email: </label>
     <input type="email" required v-model="email" />
     <label>Password: </label>
     <input type="password" required v-model="password" />
+    <div v-if="passwordError" class="error">{{ passwordError }}</div>
+
     <label>Role: </label>
     <select v-model="role">
       <option value="developer">Web Dev</option>
@@ -23,6 +26,10 @@
       <input type="checkbox" required v-model="terms" />
       <label>Accept terms and conditions.</label>
     </div>
+
+    <div class="submit">
+      <button>Create an Account</button>
+    </div>
   </form>
 
   <p>Email: {{ email }}</p>
@@ -41,14 +48,15 @@ export default {
       terms: false,
       tempSkill: "",
       skills: [],
+      passwordError: "",
     };
   },
 
   methods: {
     addSkill(event) {
-      //   console.log(event);
+      // console.log(event);
       // The event is a built-in object that we can use and manipulate, in this case to capute keyboards clicks
-      if (event.key === "Enter" && this.tempSkill) {
+      if (event.key === "ArrowDown" && this.tempSkill) {
         // Everytime that we type "," && tempSkill is not an empty string, we push the value to the skills array
         if (!this.skills.includes(this.tempSkill)) {
           // This check prevents us from having duplicate values in the skills array
@@ -59,12 +67,26 @@ export default {
     },
 
     deleteSkill(skill) {
-    //   console.log(skill);
-        this.skills = this.skills.filter((item) => { // We update the skills array and filter out the clicked item
-          return skill !== item; 
-          // If they are not equal it returns true and that items stays in the array
-          // If they are equal the expression "skill !== item" will return false hence the item will be removed from the array
-        });
+      //   console.log(skill);
+      this.skills = this.skills.filter((item) => {
+        // We update the skills array and filter out the clicked item
+        return skill !== item;
+        // If they are not equal it returns true and that items stays in the array
+        // If they are equal the expression "skill !== item" will return false hence the item will be removed from the array
+      });
+    },
+
+    handleSubmit() {
+      //Validate password
+      this.passwordError = this.password.length > 5 ? "" : "The password must be at least 6 characters long.";
+
+      if (!this.passwordError) {
+        console.log("email: ", this.email);
+        console.log("password: ", this.password);
+        console.log("role: ", this.role);
+        console.log("skills: ", this.skills);
+        console.log("terms accepted: ", this.terms);
+      }
     },
   },
 };
@@ -118,5 +140,23 @@ input[type="checkbox"] {
   font-weight: bold;
   color: #777;
   cursor: pointer;
+}
+
+button {
+  background: #0b6dff;
+  border: 0;
+  padding: 10px 20px;
+  margin-top: 20px;
+  color: white;
+  border-radius: 20px;
+}
+.submit {
+  text-align: center;
+}
+.error {
+  color: #ff0062;
+  margin-top: 10px;
+  font-size: 0.8em;
+  font-weight: bold;
 }
 </style>
